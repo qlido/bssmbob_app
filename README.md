@@ -1,3 +1,5 @@
 # bssmbob
 급식을 먹기위해 학교간다
-# 고맙다 이은호 // 앱의 전신
+
+
+//고맙다 GUDUCK_HIGHSCHOOL/LEEEUNHO // 앱의 전신
