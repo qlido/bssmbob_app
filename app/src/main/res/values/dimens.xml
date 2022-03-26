@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="pageMargin">20dp</dimen>
+    <dimen name="pagerOffset">30dp</dimen>
+    <dimen name="pageMarginAndoffset">50dp</dimen>
+</resources>
