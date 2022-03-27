@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         preferences = applicationContext.getSharedPreferences("last_meal", Context.MODE_PRIVATE)
         editor = preferences.edit()
+
+
         mealParse()
         mealParse2()
         mealParse3()
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             offscreenPageLimit = 3
             getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
         }
         pager3.apply {
             clipToPadding = false
@@ -56,7 +60,13 @@ class MainActivity : AppCompatActivity() {
             offscreenPageLimit = 3
             getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
         }
+
+//        pager.setCurrentItem(0,true)
+//        pager2.setCurrentItem(1,true)
+//        pager3.setCurrentItem(2,true)
+
 
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
@@ -68,6 +78,11 @@ class MainActivity : AppCompatActivity() {
         pager.setPageTransformer(compositePageTransformer)
         pager2.setPageTransformer(compositePageTransformer)
         pager3.setPageTransformer(compositePageTransformer)
+
+
+
+
+
     }
 
     fun mealParse() {
@@ -82,8 +97,7 @@ class MainActivity : AppCompatActivity() {
                     val meal_list = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
                     for (meal in 0 until meal_list.length()) {
                         lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
-                            (meal_list[meal] as JSONObject).getString("DDISH_NM"),
-                            background = colorList[meal]))
+                            (meal_list[meal] as JSONObject).getString("DDISH_NM"), background = colorList[meal]))
                     }
                 }
 
@@ -91,7 +105,11 @@ class MainActivity : AppCompatActivity() {
                     pager.adapter = MainAdapter(lunchList)
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
-                    pager.setCurrentItem(num, true)
+                    if (num == 1 || num == 7) {
+                        pager.setCurrentItem(0, true)
+                    } else {
+                        pager.setCurrentItem(num - 2, true)
+                    }
                 }
             } catch (e: Exception) {
 //                runOnUiThread {
@@ -122,7 +140,11 @@ class MainActivity : AppCompatActivity() {
                     pager2.adapter = MainAdapter(lunchList2)
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
-                    pager2.setCurrentItem(num, true)
+                    if (num == 1 || num == 7) {
+                        pager.setCurrentItem(0, true)
+                    } else {
+                        pager.setCurrentItem(num - 2, true)
+                    }
                 }
             } catch (e: Exception) {
 //                runOnUiThread {
@@ -152,7 +174,11 @@ class MainActivity : AppCompatActivity() {
                     pager3.adapter = MainAdapter(lunchList3)
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
-                    pager3.setCurrentItem(num, true)
+                    if (num == 1 || num >= 6) {
+                        pager.setCurrentItem(0, true)
+                    } else {
+                        pager.setCurrentItem(num - 2, true)
+                    }
                 }
             } catch (e: Exception) {
 //                runOnUiThread {
