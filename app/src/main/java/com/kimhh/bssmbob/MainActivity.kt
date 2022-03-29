@@ -141,9 +141,9 @@ class MainActivity : AppCompatActivity() {
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
                     if (num == 1 || num == 7) {
-                        pager.setCurrentItem(0, true)
+                        pager2.setCurrentItem(0, true)
                     } else {
-                        pager.setCurrentItem(num - 2, true)
+                        pager2.setCurrentItem(num - 2, true)
                     }
                 }
             } catch (e: Exception) {
@@ -175,9 +175,9 @@ class MainActivity : AppCompatActivity() {
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
                     if (num == 1 || num >= 6) {
-                        pager.setCurrentItem(0, true)
+                        pager3.setCurrentItem(0, true)
                     } else {
-                        pager.setCurrentItem(num - 2, true)
+                        pager3.setCurrentItem(num - 2, true)
                     }
                 }
             } catch (e: Exception) {
