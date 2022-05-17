@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
     private val lunchList2: ArrayList<LunchData> = arrayListOf()
     private val lunchList3: ArrayList<LunchData> = arrayListOf()
                                                     //월 노랑   //화 핑  //수 초   //목 주  //금 하늘
-    private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
+    private val colorList = arrayListOf<String>("#cccccc","#cccccc","#cccccc","#cccccc","#cccccc")
+    //private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +82,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
     }
+
+
 
     fun mealParse() {
         val parsing = GlobalScope.launch(Dispatchers.IO) {
@@ -97,7 +98,8 @@ class MainActivity : AppCompatActivity() {
                     val meal_list = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
                     for (meal in 0 until meal_list.length()) {
                         lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
-                            (meal_list[meal] as JSONObject).getString("DDISH_NM"), background = colorList[meal]))
+                            (meal_list[meal] as JSONObject).getString("DDISH_NM").trim().replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n"),
+                             background = colorList[meal]))
                     }
                 }
 
@@ -131,15 +133,15 @@ class MainActivity : AppCompatActivity() {
                     val meal_list2 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
                     for (meal in 0 until meal_list2.length()) {
                         lunchList2.add(LunchData("중식 ${(meal_list2[meal] as JSONObject).getString("CAL_INFO")}",
-                            (meal_list2[meal] as JSONObject).getString("DDISH_NM"),
+                            (meal_list2[meal] as JSONObject).getString("DDISH_NM").replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n"),
                             background = colorList[meal]))
                     }
                 }
 
                 runOnUiThread {
                     pager2.adapter = MainAdapter(lunchList2)
-                    val cal = Calendar.getInstance();
-                    val num = cal.get(Calendar.DAY_OF_WEEK);
+                    val cal = Calendar.getInstance()
+                    val num = cal.get(Calendar.DAY_OF_WEEK)
                     if (num == 1 || num == 7) {
                         pager2.setCurrentItem(0, true)
                     } else {
@@ -154,6 +156,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun mealParse3() {
+
         val parsing3 = GlobalScope.launch(Dispatchers.IO) {
             try {
                 val request3 = Jsoup.connect(
@@ -165,16 +168,19 @@ class MainActivity : AppCompatActivity() {
                     val meal_list3 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
                     for (meal in 0 until meal_list3.length()) {
                         lunchList3.add(LunchData("석식 ${(meal_list3[meal] as JSONObject).getString("CAL_INFO")}",
-                            (meal_list3[meal] as JSONObject).getString("DDISH_NM"),
+                            (meal_list3[meal] as JSONObject).getString("DDISH_NM").replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n"),
                             background = colorList[meal]))
                     }
+                    lunchList3.add(LunchData("석식 50000kcal",
+                        "행복한 집으로 가셨군요\n집에서 맛난 국밥 드세요",
+                        background = "#ffc0cb"))
                 }
 
                 runOnUiThread {
                     pager3.adapter = MainAdapter(lunchList3)
                     val cal = Calendar.getInstance();
                     val num = cal.get(Calendar.DAY_OF_WEEK);
-                    if (num == 1 || num >= 6) {
+                    if (num == 1 || num == 7 ) {
                         pager3.setCurrentItem(0, true)
                     } else {
                         pager3.setCurrentItem(num - 2, true)
