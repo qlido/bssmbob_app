@@ -11,37 +11,38 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="700dp"
         android:layout_marginTop="15dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:gravity="center_horizontal"
         android:paddingStart="40dp"
         android:paddingEnd="40dp" />
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="15dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center_horizontal"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp" />
+<!--    <androidx.viewpager2.widget.ViewPager2-->
+<!--        android:id="@+id/pager2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:clipChildren="false"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:paddingStart="40dp"-->
+<!--        android:paddingEnd="40dp" />-->
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager3"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="15dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center_horizontal"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp" />
+<!--    <androidx.viewpager2.widget.ViewPager2-->
+<!--        android:id="@+id/pager3"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:clipChildren="false"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:paddingStart="40dp"-->
+<!--        android:paddingEnd="40dp" />-->
 
 
-    <!--    <androidx.cardview.widget.CardView-->
+
+<!--        <androidx.cardview.widget.CardView-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_margin="10dp">-->
@@ -74,7 +75,7 @@
 <!--                    android:textSize="20sp"-->
 <!--                    android:textColor="#000"/>-->
 <!--            </LinearLayout>-->
-<!--            -->
+
 <!--            <TextView-->
 <!--                android:layout_marginTop="5dp"-->
 <!--                android:id="@+id/meal_list"-->
