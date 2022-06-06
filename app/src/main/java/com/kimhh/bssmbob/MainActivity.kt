@@ -144,14 +144,18 @@ class MainActivity : AppCompatActivity() {
                         //  (meal_list[meal] as JSONObject).getString("DDISH_NM"), background = colorList[meal]))
 
 
-                        kcalList.add(meal,test2)
-                        mealList.set(meal, mealList.get(meal)+"\n\n석식 \n\n${test}")
+                        kcalList.add(meal, test2)
+                        mealList.set(meal, mealList.get(meal) + "\n\n석식 \n\n${test}")
 
 
-                        lunchList.add(meal,LunchData(d, mealList.get(meal), background = colorList[meal]))
                     }
                 }
-
+                for (i in 0..4) {
+                    lunchList.add(
+                        i,
+                        LunchData(getMonday(), mealList.get(i), background = colorList[i])
+                    )
+                }
                 runOnUiThread {
                     pager.adapter = MainAdapter(lunchList)
                     val cal = Calendar.getInstance()
@@ -170,40 +174,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    fun mealParse2() {
-//        val parsing2 = GlobalScope.launch(Dispatchers.IO) {
-//            try {
-//                val request2 = Jsoup.connect(
-//                    "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
-//                            "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=2&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
-//                ).ignoreContentType(true).ignoreHttpErrors(true).get()
-//
-//                val jObject2 = JSONObject(request2.body().text()).apply {
-//                    val meal_list2 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
-//                    for (meal in 0 until meal_list2.length()) {
-//                        lunchList2.add(LunchData("중식 ${(meal_list2[meal] as JSONObject).getString("CAL_INFO")}",
-//                            (meal_list2[meal] as JSONObject).getString("DDISH_NM"),
-//                            background = colorList[meal]))
-//                    }
-//                }
-//
-//                runOnUiThread {
-//                    pager2.adapter = MainAdapter(lunchList2)
-//                    val cal = Calendar.getInstance();
-//                    val num = cal.get(Calendar.DAY_OF_WEEK);
-//                    if (num == 1 || num == 7) {
-//                        pager.setCurrentItem(0, true)
-//                    } else {
-//                        pager.setCurrentItem(num - 2, true)
-//                    }
-//                }
-//            } catch (e: Exception) {
-////                runOnUiThread {
-////                    kcal.text = preferences.getString("kcal", "급식")
-////                }
-//            }
-//        }
-//    }
+    /* fun mealParse2() {
+         val parsing2 = GlobalScope.launch(Dispatchers.IO) {
+             try {
+                 for(i in 0..4) {
+                     val request2 = Jsoup.connect(
+                         "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
+                                 "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=2&MLSV_YMD=${(getMonday2()+i).toString()}"
+                     ).ignoreContentType(true).ignoreHttpErrors(true).get()
+
+                     val jObject2 = JSONObject(request2.body().text()).apply {
+                         val meal_list2 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
+                         for (meal in 0 until meal_list2.length()) {
+                             lunchList2.add(LunchData("중식 ${(meal_list2[meal] as JSONObject).getString("CAL_INFO")}",
+                                     (meal_list2[meal] as JSONObject).getString("DDISH_NM"), background = colorList[meal]))
+                         }
+                     }
+                 }
+
+                 runOnUiThread {
+                     pager.adapter = MainAdapter(lunchList2)
+                     val cal = Calendar.getInstance();
+                     val num = cal.get(Calendar.DAY_OF_WEEK);
+                     if (num == 1 || num == 7) {
+                         pager.setCurrentItem(0, true)
+                     } else {
+                         pager.setCurrentItem(num - 2, true)
+                     }
+                 }
+             } catch (e: Exception) {
+ //                runOnUiThread {
+ //                    kcal.text = preferences.getString("kcal", "급식")
+ //                }
+             }
+         }
+     }*/
+
+
 //    fun mealParse3() {
 //        val parsing3 = GlobalScope.launch(Dispatchers.IO) {
 //            try {
@@ -245,19 +252,31 @@ class MainActivity : AppCompatActivity() {
 
         val c = Calendar.getInstance()
 
-        c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
         return formatter.format(c.time)
 
     }
 
-    fun getFriday(): String{
+    fun getMonday2(): Int {
 
         val formatter = java.text.SimpleDateFormat("yyyyMMdd")
 
         val c = Calendar.getInstance()
 
-        c.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY)
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+
+        return formatter.format(c.time).toInt()
+
+    }
+
+    fun getFriday(): String {
+
+        val formatter = java.text.SimpleDateFormat("yyyyMMdd")
+
+        val c = Calendar.getInstance()
+
+        c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
 
         return formatter.format(c.time)
 
