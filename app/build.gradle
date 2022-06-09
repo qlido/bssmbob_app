@@ -9,8 +9,10 @@ android {
         applicationId "com.kimhh.dongjulunch"
         minSdkVersion 26
         targetSdkVersion 30
+
         versionCode 5
         versionName "3.1"
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

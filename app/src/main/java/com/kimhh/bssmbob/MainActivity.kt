@@ -29,11 +29,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var preferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
     private val lunchList: ArrayList<LunchData> = arrayListOf()
+
                                                  //월 노랑   //화 핑    //수 초   //목 주   //금 하늘
     private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
     var mealList: ArrayList<String> = ArrayList()
     val kcalList: ArrayList<Float> = ArrayList()
     val dateList: ArrayList<String> = ArrayList()
+    //private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,9 +65,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
     }
+
+
 
 
     fun mealParse() {
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                     "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
                             "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=1&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
                 ).ignoreContentType(true).ignoreHttpErrors(true).get()
+
 
                 val request2 = Jsoup.connect(
                     "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
@@ -104,6 +108,7 @@ class MainActivity : AppCompatActivity() {
                 val jObject2 = JSONObject(request2.body().text()).apply {
                     val meal_list2 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
                     for (meal in 0 until meal_list2.length()) {
+
                         val test =  (meal_list2[meal] as JSONObject).getString("DDISH_NM").trim().replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n")
                         val test2 = (meal_list2[meal] as JSONObject).getString("CAL_INFO").split(" ")[0].toFloat()
 //                        lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
@@ -130,7 +135,12 @@ class MainActivity : AppCompatActivity() {
                         mealList.set(di, mealList.get(di) + "\n\n석식 \n\n${test}")
 
 
+
+    
                     }
+                    lunchList3.add(LunchData("석식 50000kcal",
+                        "행복한 집으로 가셨군요\n집에서 맛난 국밥 드세요",
+                        background = "#ffc0cb"))
                 }
                 for(i in 0 until dateList.size) {
                     lunchList.add(
@@ -139,6 +149,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
                 runOnUiThread {
+-
                     pager.adapter = MainAdapter(lunchList)
                     val cal: LocalDate = LocalDate.now()
                     val fom = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -147,8 +158,8 @@ class MainActivity : AppCompatActivity() {
                     if(ind < 0){
                         pager.setCurrentItem( 0, true)
                     }else{
-                        pager.setCurrentItem(ind,true)
-                    }
+            pager.setCurrentItem(ind,true)
+                   }
                 }
             } catch (e: Exception) {
 //                runOnUiThread {
