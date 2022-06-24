@@ -1,5 +1,10 @@
 # bssmbob
-급식을 먹기위해 학교간다
 
+#### **급식을 먹기위해 학교간다**
+---
+### I refer to
+- open.neis.go.kr
 
-//고맙다 GUDUCK_HIGHSCHOOL/LEEEUNHO // 앱의 전신
+### may be it will be made WEB or IOS app 
+
+ 
