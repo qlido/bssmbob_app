@@ -1,9 +1,13 @@
 package com.kimhh.bssmbob
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.Display
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -30,14 +34,20 @@ class MainActivity : AppCompatActivity() {
     lateinit var editor: SharedPreferences.Editor
     private val lunchList: ArrayList<LunchData> = arrayListOf()
 
-                                                 //월 노랑   //화 핑    //수 초   //목 주   //금 하늘
-    private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
+    //월 노랑   //화 핑    //수 초   //목 주   //금 하늘
+    private val colorList =
+        arrayListOf("#6E85B7", "#B2C8DF", "#C4D7E0", "#F8F9D7", "#FFFFFF")
+    private val yoil = arrayListOf("월","화","수","목","금")
     var mealList: ArrayList<String> = ArrayList()
     val kcalList: ArrayList<Float> = ArrayList()
     val dateList: ArrayList<String> = ArrayList()
     //private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         preferences = applicationContext.getSharedPreferences("last_meal", Context.MODE_PRIVATE)
@@ -64,122 +74,78 @@ class MainActivity : AppCompatActivity() {
         pager.setPageTransformer(compositePageTransformer)
 
 
-
     }
 
 
-
-
     fun mealParse() {
+        getWeek()
+        for(i in 0..5){
+            mealList.add("")
+        }
         val parsing = GlobalScope.launch(Dispatchers.IO) {
             try {
-                val request = Jsoup.connect(
-                    "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
-                            "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=1&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
+                val req = Jsoup.connect(
+                    "https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=ef5a0e25d9b24cce86082829ccb81947&Type=json&pIndex=1&pSize=100" +
+                            "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
                 ).ignoreContentType(true).ignoreHttpErrors(true).get()
-
-
-                val request2 = Jsoup.connect(
-                    "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
-                            "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=2&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
-                ).ignoreContentType(true).ignoreHttpErrors(true).get()
-
-                val request3 = Jsoup.connect(
-                    "https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&pIndex=1&pSize=1" +
-                            "&ATPT_OFCDC_SC_CODE=C10&SD_SCHUL_CODE=7150658&MMEAL_SC_CODE=3&MLSV_FROM_YMD=${getMonday()}&MLSV_TO_YMD=${getFriday()}"
-                ).ignoreContentType(true).ignoreHttpErrors(true).get()
-
-                val jObject = JSONObject(request.body().text()).apply {
-                    val meal_list = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
+                val jsonobj = JSONObject(req.body().text()).apply {
+                    val meal_list =
+                        (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
 
                     for (meal in 0 until meal_list.length()) {
-                        val test =  (meal_list[meal] as JSONObject).getString("DDISH_NM").trim().replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n")
-                        val test2 = (meal_list[meal] as JSONObject).getString("CAL_INFO").split(" ")[0].toFloat()
+                        val test = (meal_list[meal] as JSONObject).getString("DDISH_NM").trim()
+                            .replace("\\([^)]*\\)".toRegex(), " ").replace("\\s+".toRegex(), "\n")
+                        val test2 = (meal_list[meal] as JSONObject).getString("CAL_INFO")
+                            .split(" ")[0].toFloat()
+                        val test3 =
+                            (meal_list[meal] as JSONObject).getString("MMEAL_SC_NM")
+                        val d = (meal_list[meal] as JSONObject).getString("MLSV_YMD")
 //                        lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
 //                            test, background = colorList[meal]))
-                        val d = (meal_list[meal] as JSONObject).getString("MLSV_YMD")
-                        kcalList.add(meal,test2)
-                        mealList.add(meal, "조식 \n\n ${test}")
-                        dateList.add(d)
+
+                        val di = dateList.indexOf(d)
+                        mealList.set(di, mealList.get(di) + "${test3}\n\n${test}\n")
+                        var a = 1
 
                         //lunchList.add(LunchData((kcalList.get(meal).toString()),mealList.get(meal),background = colorList[meal]))
                     }
                 }
-                val jObject2 = JSONObject(request2.body().text()).apply {
-                    val meal_list2 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
-                    for (meal in 0 until meal_list2.length()) {
-
-                        val test =  (meal_list2[meal] as JSONObject).getString("DDISH_NM").trim().replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n")
-                        val test2 = (meal_list2[meal] as JSONObject).getString("CAL_INFO").split(" ")[0].toFloat()
-//                        lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
-//                            test, background = colorList[meal]))
-
-                        kcalList.add(meal,test2)
-                        mealList.set(meal, mealList.get(meal)+"\n\n중식 \n\n${test}")
-
-                        // lunchList.add(meal,LunchData((kcalList.get(meal).toString()),mealList.get(meal),background = colorList[meal]))
-                    }
+                for( i in 0 until dateList.size){
+                    var M = dateList.get(i).substring(5,6).toInt()
+                    var d = dateList.get(i).substring(7,8).toInt()
+                    dateList.set(i,"${M.toString()}월 ${d.toString()}일 (${yoil[i]})")
                 }
-                val jObject3 = JSONObject(request3.body().text()).apply {
-                    val meal_list3 = (this.getJSONArray("mealServiceDietInfo")[1] as JSONObject).getJSONArray("row")
-                    for (meal in 0 until meal_list3.length()) {
-                        val test =  (meal_list3[meal] as JSONObject).getString("DDISH_NM").trim().replace("\\([^)]*\\)".toRegex()," ").replace("\\s+".toRegex(),"\n")
-                        val test2 = (meal_list3[meal] as JSONObject).getString("CAL_INFO").split(" ")[0].toFloat()
-                        val d = (meal_list3[meal] as JSONObject).getString("MLSV_YMD")
-
-                        //lunchList.add(LunchData("조식 ${(meal_list[meal] as JSONObject).getString("CAL_INFO")}",
-                        //  (meal_list[meal] as JSONObject).getString("DDISH_NM"), background = colorList[meal]))
-
-                        val di = dateList.indexOf(d)
-                        kcalList.add(di, test2)
-                        mealList.set(di, mealList.get(di) + "\n\n석식 \n\n${test}")
-
-
-
-    
-                    }
-                    lunchList3.add(LunchData("석식 50000kcal",
-                        "행복한 집으로 가셨군요\n집에서 맛난 국밥 드세요",
-                        background = "#ffc0cb"))
-                }
-                for(i in 0 until dateList.size) {
+                val TAG = "asdf"
+                for (i in 0 until dateList.size) {
                     lunchList.add(
                         i,
-                        LunchData(dateList.get(i), mealList.get(i), background = colorList[i])
+                        LunchData(
+                            dateList.get(i),
+                            if (mealList.get(i) == "") "급식이 없습니다" else mealList.get(i),
+                            background = "#d4ecff"
+                        )
                     )
                 }
+
                 runOnUiThread {
--
                     pager.adapter = MainAdapter(lunchList)
                     val cal: LocalDate = LocalDate.now()
                     val fom = DateTimeFormatter.ofPattern("yyyyMMdd")
                     val fmd = cal.format(fom)
                     val ind = dateList.indexOf((fmd))
-                    if(ind < 0){
-                        pager.setCurrentItem( 0, true)
-                    }else{
-            pager.setCurrentItem(ind,true)
-                   }
+                    if (ind < 0) {
+                        pager.setCurrentItem(0, true)
+                    } else {
+                        pager.setCurrentItem(ind, true)
+                    }
                 }
             } catch (e: Exception) {
 //                runOnUiThread {
 //                    kcal.text = preferences.getString("kcal", "급식")
 //                }
+                Log.e("error", e.toString())
             }
         }
-    }
-
-
-    fun getMonday(): String{
-
-        val formatter = java.text.SimpleDateFormat("yyyyMMdd")
-
-        val c = Calendar.getInstance()
-
-        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-
-        return formatter.format(c.time)
-
     }
 
 
@@ -193,6 +159,30 @@ class MainActivity : AppCompatActivity() {
 
         return formatter.format(c.time)
 
+
+    }
+
+    fun getMonday(): String {
+
+        val formatter = java.text.SimpleDateFormat("yyyyMMdd")
+
+        val c = Calendar.getInstance()
+
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+
+        return formatter.format(c.time)
+
+    }
+
+    fun getWeek(): Unit {
+
+        val formatter = java.text.SimpleDateFormat("yyyyMMdd")
+        val c = Calendar.getInstance()
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        for (i in 0..4) {
+            c.add(Calendar.DATE, if (i == 0) 0 else 1).toString()
+            dateList.add(formatter.format(c.time))
+        }
 
     }
 
