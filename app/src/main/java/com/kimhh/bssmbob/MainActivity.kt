@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     var mealList: ArrayList<String> = ArrayList()
     val kcalList: ArrayList<Float> = ArrayList()
     val dateList: ArrayList<String> = ArrayList()
+    val dayList: ArrayList<String> = ArrayList()
     //private val colorList = arrayListOf<String>("#FFB300","#9575CD","#009688","#FF7043","#78909C")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,15 +113,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 for( i in 0 until dateList.size){
                     var M = dateList.get(i).substring(5,6).toInt()
-                    var d = dateList.get(i).substring(7,8).toInt()
-                    dateList.set(i,"${M.toString()}월 ${d.toString()}일 (${yoil[i]})")
+                    var d = dateList.get(i).substring(6,8).toInt()
+                    Log.d("Test", dateList.get(i).substring(4,6))
+                    Log.d("Test",dateList.get(i).substring(6,8))
+                    dayList.set(i,"${M.toString()}월 ${d.toString()}일 (${yoil[i]})")
                 }
                 val TAG = "asdf"
-                for (i in 0 until dateList.size) {
+                for (i in 0 until dayList.size) {
                     lunchList.add(
                         i,
                         LunchData(
-                            dateList.get(i),
+                            dayList.get(i),
                             if (mealList.get(i) == "") "급식이 없습니다" else mealList.get(i),
                             background = "#d4ecff"
                         )
@@ -182,6 +185,8 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..4) {
             c.add(Calendar.DATE, if (i == 0) 0 else 1).toString()
             dateList.add(formatter.format(c.time))
+            dayList.add(formatter.format(c.time))
+
         }
 
     }
