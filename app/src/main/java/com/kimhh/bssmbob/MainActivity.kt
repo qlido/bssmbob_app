@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
                     for (meal in 0 until meal_list.length()) {
                         val test = (meal_list[meal] as JSONObject).getString("DDISH_NM").trim()
-                            .replace("\\([^)]*\\)".toRegex(), " ").replace("\\s+".toRegex(), "\n")
+                            .replace("\\([^)]*\\)".toRegex(), " ").replace("\\s+".toRegex(), "\n").trim()
                         val test2 = (meal_list[meal] as JSONObject).getString("CAL_INFO")
                             .split(" ")[0].toFloat()
                         val test3 =
@@ -105,14 +105,19 @@ class MainActivity : AppCompatActivity() {
 
                         val di = dateList.indexOf(d)
                        when (test3){
-                          "조식" -> mealList.set(di, mealList.get(di) + "${test3}\n\n${test}\n")
-                           else -> mealList.set(di, mealList.get(di) + "\n${test3}\n\n${test}\n")
+                          "조식" -> mealList.set(di, mealList.get(di) + "${test3}\n\n${test}\n\n")
+                           else -> mealList.set(di, mealList.get(di) + "${test3}\n\n${test}\n\n")
                        }
                         var a = 1
 
                         //lunchList.add(LunchData((kcalList.get(meal).toString()),mealList.get(meal),background = colorList[meal]))
                     }
+
                 }
+                val cal: LocalDate = LocalDate.now()
+                val fom = DateTimeFormatter.ofPattern("yyyyMMdd")
+                val fmd = cal.format(fom)
+                val ind = dateList.indexOf((fmd))
                 for( i in 0 until dateList.size){
                     var M = dateList.get(i).substring(4,6).toInt()
                     var d = dateList.get(i).substring(6,8).toInt()
@@ -125,17 +130,14 @@ class MainActivity : AppCompatActivity() {
                         LunchData(
                             dateList.get(i),
                             if (mealList.get(i) == "") "급식이 없습니다" else mealList.get(i),
-                            background = "#d4ecff"
+                            background = "#3676e8"
                         )
                     )
                 }
 
                 runOnUiThread {
                     pager.adapter = MainAdapter(lunchList)
-                    val cal: LocalDate = LocalDate.now()
-                    val fom = DateTimeFormatter.ofPattern("yyyyMMdd")
-                    val fmd = cal.format(fom)
-                    val ind = dateList.indexOf((fmd))
+
                     if (ind < 0) {
                         pager.setCurrentItem(0, true)
                     } else {

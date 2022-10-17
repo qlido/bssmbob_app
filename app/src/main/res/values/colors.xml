@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4B89E6</color>
+    <color name="colorPrimary">#6495ed</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="CornflowerBlue">#6495ed</color>
 <!--    <color name="ToMyung">#0000000</color>-->
 </resources>

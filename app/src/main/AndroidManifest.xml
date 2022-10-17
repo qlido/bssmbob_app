@@ -3,7 +3,7 @@
     package="com.kimhh.bssmbob">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/bsmbob_ubin"
@@ -16,7 +16,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+\
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
