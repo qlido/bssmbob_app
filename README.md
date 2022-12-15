@@ -5,7 +5,4 @@
 ---
 ### I refer to
 - open.neis.go.kr
-
-### may be it will be made WEB or IOS app 
-
  
